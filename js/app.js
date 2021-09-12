@@ -8,8 +8,10 @@ const loadProducts = () => {
 // show all product in UI 
 const showProducts = (products) => {
   const allProducts = products.map((pd) => pd);
+  console.log(allProducts)
   for (const product of allProducts) {
-    const image = product.images;
+    console.log(product)
+    const image = product.image; /* image is work here */
     const div = document.createElement("div");
     div.classList.add("product");
     div.innerHTML = `<div class="single-product">
