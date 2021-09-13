@@ -10,8 +10,7 @@ const showProducts = (products) => {
   const allProducts = products.map((pd) => pd);
   
   for (const product of allProducts) {
-     console.log(product.rating.rate)
-     console.log(product.rating.count)
+    
     const image = product.image; /* image is work here */
     const div = document.createElement("div");
     div.classList.add("product");
@@ -32,11 +31,45 @@ const showProducts = (products) => {
       </a>${product?.rating?.rate}</h3>
       <h4 class="">rating count:${product?.rating?.count} <a><i class="fas fa-user-circle"></i></a></h4>
       <button onclick="addToCart(${product?.id},${product?.price})" id="addToCart-btn" class="buy-now btn btn-success fs-4">add to cart</button>
-      <button id="details-btn" class="btn btn-danger fs-4">Details</button></div>
+      <button id="details-btn" onclick="showDetail(${product.id})" class="btn btn-danger fs-4">Details</button></div>
       `;
     document.getElementById("all-products").appendChild(div);
   }
 };
+
+const showDetail=(id)=>{
+  const url=`https://fakestoreapi.com/products/${id}`
+  fetch(url)
+  .then(res=>res.json())
+  .then(data=>detailField(data))
+}
+const datailArea=document.getElementById('detail-field');
+const detailField=(items)=>{
+  datailArea.innerHTML=""
+  
+   console.log(items);
+   const div=document.createElement("div")
+    div.classList.add("row");
+    
+    div.innerHTML=
+    `
+    <div class="col-md-4">
+          <img src="${items.image}" class="img-fluid rounded-start" alt="${items.category}">
+        </div>
+        <div class="col-md-8 fs-3 ">
+          <div class="card-body">
+            <h3 class="card-title"><span class="text-danger">Title:</span>${items.title} </h3>
+            <h4 class="card-title"><span class="text-danger">Price:</span>${items.price} </h4>
+            <p class="card-text"><span class="text-danger">Pategory:</span>${items.category}</p>
+            <p class="card-text"><small class="text-muted"><span class="text-danger">details:</span>${items.description}</small></p>
+          </div>
+        </div>
+
+    `  
+    
+    datailArea.appendChild(div);
+  
+}
 let count = 0;
 const addToCart = (id, price) => {
   count = count + 1;
@@ -49,7 +82,7 @@ const addToCart = (id, price) => {
 
 const getInputValue = (id) => {
   const element = document.getElementById(id).innerText;
-  const converted = parseFloat(element);
+  const converted = parseFloat(element);/* total decimal parseint bug is ok now */
   return converted;
 };
 
@@ -58,12 +91,12 @@ const updatePrice = (id, value) => {
   const convertedOldPrice = getInputValue(id);
   const convertPrice = parseFloat(value);
   const total = convertedOldPrice + convertPrice;
-  document.getElementById(id).innerText = (total.toFixed(2));
+  document.getElementById(id).innerText = (total.toFixed(2));/* fixed 2 decimal  */
 };
 
 // set innerText function
 const setInnerText = (id, value) => {
-  document.getElementById(id).innerText =(value).toFixed(2);
+  document.getElementById(id).innerText =(value).toFixed(2);/* fixed 2 decimal  */
 };
 
 // update delivery charge and total Tax
@@ -89,7 +122,7 @@ const updateTotal = () => {
     getInputValue("price") 
     + getInputValue("delivery-charge")
     + getInputValue("total-tax");
-  document.getElementById("total").innerText = grandTotal.toFixed(2);
+  document.getElementById("total").innerText = grandTotal.toFixed(2); /* fixed 2 decimal  */
 };
 
 loadProducts();
